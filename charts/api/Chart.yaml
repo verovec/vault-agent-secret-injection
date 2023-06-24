@@ -1,0 +1,14 @@
+name: api
+
+apiVersion: v1
+type: application
+version: 2023.06.24
+
+
+description: Simple Golang API
+home: https://github.com/verovec/vault-agent-secret-injection
+
+
+maintainers:
+- email: verove.clement@gmail.com
+  name: Clement

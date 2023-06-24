@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-deployment
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api
+  template:
+    metadata:
+      labels:
+        app: api
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/agent-inject-status: "update"
+        vault.hashicorp.com/agent-inject-secret-app: "kv/data/api"
+        vault.hashicorp.com/agent-inject-template-app: |
+          {{`{{ with secret "kv/data/api" }}
+          {{ range $k, $v := .Data.data }}
+            export {{ $k }}={{ $v }}
+          {{ end }}
+          {{ end }}`}}
+        vault.hashicorp.com/role: 'api'
+    spec:
+      serviceAccountName: {{ .Release.Name }}-serviceaccount
+      restartPolicy: Always
+      containers:
+      - name: api
+        image: {{ printf "%s/%s:%s" .Values.registry.endpoint .Values.api.image.name .Values.api.image.tag | quote }}
+        command: ["/bin/sh"]
+        args: ["-c", ". /vault/secrets/app && ./app"]
+        imagePullPolicy: {{ .Values.api.image.pullPolicy | quote }}
+        resources:
+        {{ if .Values.api.resources.enabled }}
+          limits:
+            cpu: {{ .Values.api.resources.limits.cpu | quote }}
+            memory: {{ .Values.api.resources.limits.memory | quote }}
+          requests:
+            cpu: {{ .Values.api.resources.requests.cpu | quote }}
+            memory: {{ .Values.api.resources.requests.memory | quote }}
+        {{ else }}
+          limits:
+            cpu: "1"
+            memory: "1Gi"
+          requests:
+            cpu: "0.1"
+            memory: "100Mi"
+        {{ end }}
+        ports:
+        - containerPort: {{ .Values.api.port }}
+        env:
+        - name: APP_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: {{ .Release.Name }}-configmap
+              key: APP_ENV
+        livenessProbe:
+          httpGet:
+            path: /
+            port: {{ .Values.api.port }}
+          initialDelaySeconds: 30
+          timeoutSeconds: 10
+          periodSeconds: 10
+          failureThreshold: 10

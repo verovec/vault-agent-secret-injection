@@ -1,0 +1,23 @@
+registry:
+  host: k3d-vault-agent-secret-injection.localhost
+  endpoint: k3d-vault-agent-secret-injection.localhost:5000
+  api: http://k3d-vault-agent-secret-injection.localhost:5000/v2/_catalog
+
+api:
+  image:
+    name: "api"
+    tag: latest
+    pullPolicy: Always
+  port: 8080
+  replicas: 1
+  resources:
+    enabled: true
+    limits:
+      cpu: 0.5
+      memory: 512Mi
+    requests:
+      cpu: 0.1
+      memory: 256Mi
+  scaler:
+    minReplicas: 1
+    maxReplicas: 5
