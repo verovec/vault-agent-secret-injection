@@ -9,9 +9,9 @@ This repository shows you how to inject secrets in you application from Hashicor
 ![](https://img.shields.io/badge/docker-20.10.22-blue)
 ![](https://img.shields.io/badge/k3d-5.4.7-yellow)
 
-<!-- ## How it works
+## How it works
 
-![](resources/architecture.png) -->
+![](resources/architecture.png)
 
 ## How to
 
