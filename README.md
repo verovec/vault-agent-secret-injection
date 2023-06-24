@@ -1,6 +1,6 @@
 # Vault Sidecar Secret Injection
 
-This repository shows you how to inject secrets in you application from Hashicorp Vault in Kubernetes
+This repository shows you how to inject secrets in your application from Hashicorp Vault in Kubernetes
 
 :warning: Never transform encrypted variable from Vault in base64 encoded data for sensitive values. You may prefer inject your sensitive values directly in pod where they are needed.
 
