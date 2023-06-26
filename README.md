@@ -4,6 +4,8 @@ This repository shows you how to inject secrets in your application from Hashico
 
 :warning: Never transform encrypted variable from Vault in base64 encoded data for sensitive values. You may prefer inject your sensitive values directly in pod where they are needed.
 
+Medium : https://medium.com/@verove.clement/inject-secret-in-application-from-vault-agent-injector-60a3fe71628e
+
 ## Prerequisites
 ![](https://img.shields.io/badge/Helm-3-9cf)
 ![](https://img.shields.io/badge/docker-20.10.22-blue)
